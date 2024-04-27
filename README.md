@@ -1,4 +1,4 @@
-# Replicate Laravel client
+# Replicate Laravel PHP client
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/halilcosdu/laravel-replicate.svg?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/halilcosdu/laravel-replicate/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/halilcosdu/laravel-replicate/actions?query=workflow%3Arun-tests+branch%3Amain)

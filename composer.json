@@ -1,6 +1,6 @@
 {
     "name": "halilcosdu/laravel-replicate",
-    "description": "This is my package laravel-replicate",
+    "description": "Replicate Laravel PHP client",
     "keywords": [
         "HalilCosdu",
         "laravel",
