@@ -91,9 +91,9 @@ readonly class Replicate
         return $this->modelService->deleteVersion($owner, $name, $version);
     }
 
-    public function deleteModelVersion(string $owner, string $name)
+    public function deleteModel(string $owner, string $name)
     {
-        return $this->modelService->deleteModel($owner, $name);
+        return $this->modelService->delete($owner, $name);
     }
 
     public function listModels()
