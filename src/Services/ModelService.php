@@ -47,6 +47,14 @@ class ModelService
     }
 
     /*
+     * https://replicate.com/docs/reference/http#models.delete
+     */
+    public function delete(string $owner, string $name)
+    {
+        return Http::replicate()->delete("/models/$owner/$name");
+    }
+
+    /*
      * https://replicate.com/docs/reference/http#models.list
      */
     public function list()
