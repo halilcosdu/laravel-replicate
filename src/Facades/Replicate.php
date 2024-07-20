@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \HalilCosdu\Replicate\Replicate getModelVersion(string $owner, string $name, string $version)
  * @method static \HalilCosdu\Replicate\Replicate listModelVersions(string $owner, string $name)
  * @method static \HalilCosdu\Replicate\Replicate deleteModelVersion(string $owner, string $name, string $version)
+ * @method static \HalilCosdu\Replicate\Replicate deleteModel(string $owner, string $name)
  * @method static \HalilCosdu\Replicate\Replicate listModels()
  * @method static \HalilCosdu\Replicate\Replicate createPrediction(array $data)
  * @method static \HalilCosdu\Replicate\Replicate getPrediction(string $id)
