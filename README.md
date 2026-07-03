@@ -44,28 +44,44 @@ Replicate::getModel(string $owner, string $name)
 Replicate::getModelVersion(string $owner, string $name, string $version)
 Replicate::listModelVersions(string $owner, string $name)
 Replicate::deleteModelVersion(string $owner, string $name, string $version)
+Replicate::updateModel(string $owner, string $name, array $data)
+Replicate::searchModels(string $query)
+Replicate::listModelExamples(string $owner, string $name, array $query = [])
+Replicate::getModelReadme(string $owner, string $name)
 Replicate::deleteModel(string $owner, string $name)
-Replicate::listModels()
-Replicate::createPrediction(array $data)
+Replicate::listModels(array $query = [])
+Replicate::createPrediction(array $data, array $headers = [])
 Replicate::getPrediction(string $id)
 Replicate::cancelPrediction($id)
-Replicate::listPredictions()
-Replicate::listTrainings()
+Replicate::listPredictions(array $query = [])
+Replicate::listTrainings(array $query = [])
 Replicate::createTraining(string $owner, string $name, string $version, array $data)
 Replicate::getTraining(string $id)
 Replicate::cancelTraining($id)
 Replicate::defaultSecret()
-Replicate::createDeploymentPrediction(string $owner, string $name, array $data)
-Replicate::createModelPrediction(string $owner, string $name, string $version, array $data)
+Replicate::createDeploymentPrediction(string $owner, string $name, array $data, array $headers = [])
+Replicate::createModelPrediction(string $owner, string $name, string $version, array $data, array $headers = [])
+Replicate::deleteDeployment(string $owner, string $name)
+Replicate::search(string $query, ?int $limit = null)
 ```
+
+#### Optional headers (sync mode & auto-cancel)
+
+The three prediction-create methods accept an optional `$headers` array. Use it to enable sync mode and automatic cancellation:
+
+```php
+Replicate::createPrediction(
+    ['version' => '...', 'input' => ['prompt' => 'a cat']],
+    ['Prefer' => 'wait=60', 'Cancel-After' => '5m']
+);
+```
+
+#### Pagination & filters
+
+The list methods (`listPredictions`, `listModels`, `listDeployments`, `listCollections`, `listTrainings`, `listModelExamples`) accept an optional `$query` array forwarded as query parameters — e.g. `cursor`, `created_after`, `source`, `sort_by`, `sort_direction`.
 #### Reference
 
-This client covers a subset of the [Replicate HTTP API](https://replicate.com/docs/reference/http) (accounts, collections, deployments, hardware, models, predictions, trainings, webhooks).
-
-> **Current limitations**
-> - The list methods do not expose pagination cursors or filters (e.g. `predictions.list` `created_after`, `models.list` `sort_by`). Callers only get the first page.
-> - The prediction create methods (`createPrediction`, `createModelPrediction`, `createDeploymentPrediction`) do not forward the `Prefer` (sync mode) or `Cancel-After` headers.
-> - The `search`, `models.update`, `models.search`, `models.examples.list`, `models.readme.get`, and `deployments.delete` endpoints are not implemented yet.
+This client covers the [Replicate HTTP API](https://replicate.com/docs/reference/http) — accounts, collections, deployments, hardware, models, predictions, trainings, webhooks, and search.
 
 ## Example
 

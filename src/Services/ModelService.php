@@ -57,8 +57,44 @@ class ModelService
     /*
      * https://replicate.com/docs/reference/http#models.list
      */
-    public function list()
+    public function list(array $query = [])
     {
-        return Http::replicate()->get('/models');
+        return Http::replicate()->get('/models', $query);
+    }
+
+    /*
+     * https://replicate.com/docs/reference/http#models.update
+     */
+    public function update(string $owner, string $name, array $data)
+    {
+        return Http::replicate()->patch("/models/$owner/$name", $data);
+    }
+
+    /*
+     * https://replicate.com/docs/reference/http#models.search
+     * Uses the non-standard QUERY HTTP method with a raw text/plain body.
+     */
+    public function search(string $query)
+    {
+        return Http::replicate()
+            ->withBody($query, 'text/plain')
+            ->send('QUERY', '/models');
+    }
+
+    /*
+     * https://replicate.com/docs/reference/http#models.examples.list
+     */
+    public function listExamples(string $owner, string $name, array $query = [])
+    {
+        return Http::replicate()->get("/models/$owner/$name/examples", $query);
+    }
+
+    /*
+     * https://replicate.com/docs/reference/http#models.readme.get
+     * Returns the README as plain-text Markdown (not JSON).
+     */
+    public function readme(string $owner, string $name)
+    {
+        return Http::replicate()->get("/models/$owner/$name/readme");
     }
 }
