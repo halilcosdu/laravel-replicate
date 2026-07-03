@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-replicate` will be documented in this file.
 
+## Unreleased
+
+### Added
+- **API parity — 6 previously-missing endpoints:**
+  - `search($query, $limit = null)` — new `SearchService` (beta `GET /search`).
+  - `updateModel($owner, $name, $data)` — `PATCH /models/{owner}/{name}`.
+  - `searchModels($query)` — `QUERY /models` (non-standard HTTP method, raw `text/plain` body).
+  - `listModelExamples($owner, $name, $query = [])` — `GET /models/{owner}/{name}/examples`.
+  - `getModelReadme($owner, $name)` — `GET /models/{owner}/{name}/readme` (returns plain-text Markdown).
+  - `deleteDeployment($owner, $name)` — `DELETE /deployments/{owner}/{name}`.
+- **Prediction headers** — `createPrediction`, `createModelPrediction`, and `createDeploymentPrediction` now accept an optional `$headers` array, enabling sync mode (`Prefer: wait=n`) and auto-cancel (`Cancel-After: 5m`). Backwards compatible (defaults to no extra headers).
+- **List filters / pagination** — every list method (`listPredictions`, `listModels`, `listDeployments`, `listCollections`, `listTrainings`, `listModelExamples`) now accepts an optional `$query` array forwarded as query parameters (`cursor`, `created_after`, `sort_by`, etc.). Backwards compatible.
+
+### Tests
+- Added `Http::fake` tests for every new method, including header forwarding (`Prefer`/`Cancel-After`), query-parameter forwarding, and the `QUERY`+`text/plain` body shape. Test count: 32 → 48.
+
 ## v1.2.1 - 2026-07-03
 
 ### Added

@@ -9,9 +9,9 @@ class DeploymentService
     /*
     * https://replicate.com/docs/reference/http#deployments.list
     */
-    public function list()
+    public function list(array $query = [])
     {
-        return Http::replicate()->get('/deployments');
+        return Http::replicate()->get('/deployments', $query);
     }
 
     /*
@@ -36,5 +36,13 @@ class DeploymentService
     public function update(string $owner, string $name, array $data)
     {
         return Http::replicate()->patch("/deployments/$owner/$name", $data);
+    }
+
+    /*
+     * https://replicate.com/docs/reference/http#deployments.delete
+     */
+    public function delete(string $owner, string $name)
+    {
+        return Http::replicate()->delete("/deployments/$owner/$name");
     }
 }

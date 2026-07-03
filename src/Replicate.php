@@ -8,6 +8,7 @@ use HalilCosdu\Replicate\Services\DeploymentService;
 use HalilCosdu\Replicate\Services\HardwareService;
 use HalilCosdu\Replicate\Services\ModelService;
 use HalilCosdu\Replicate\Services\PredictionService;
+use HalilCosdu\Replicate\Services\SearchService;
 use HalilCosdu\Replicate\Services\TrainingService;
 use HalilCosdu\Replicate\Services\WebhookService;
 
@@ -20,6 +21,7 @@ readonly class Replicate
         private HardwareService $hardwareService,
         private ModelService $modelService,
         private PredictionService $predictionService,
+        private SearchService $searchService,
         private TrainingService $trainingService,
         private WebhookService $webhookService,
     ) {
@@ -36,14 +38,14 @@ readonly class Replicate
         return $this->collectionService->get($slug);
     }
 
-    public function listCollections()
+    public function listCollections(array $query = [])
     {
-        return $this->collectionService->list();
+        return $this->collectionService->list($query);
     }
 
-    public function listDeployments()
+    public function listDeployments(array $query = [])
     {
-        return $this->deploymentService->list();
+        return $this->deploymentService->list($query);
     }
 
     public function createDeployment(array $data)
@@ -59,6 +61,11 @@ readonly class Replicate
     public function updateDeployment(string $owner, string $name, array $data)
     {
         return $this->deploymentService->update($owner, $name, $data);
+    }
+
+    public function deleteDeployment(string $owner, string $name)
+    {
+        return $this->deploymentService->delete($owner, $name);
     }
 
     public function listHardware()
@@ -96,14 +103,34 @@ readonly class Replicate
         return $this->modelService->delete($owner, $name);
     }
 
-    public function listModels()
+    public function listModels(array $query = [])
     {
-        return $this->modelService->list();
+        return $this->modelService->list($query);
     }
 
-    public function createPrediction(array $data)
+    public function updateModel(string $owner, string $name, array $data)
     {
-        return $this->predictionService->create($data);
+        return $this->modelService->update($owner, $name, $data);
+    }
+
+    public function searchModels(string $query)
+    {
+        return $this->modelService->search($query);
+    }
+
+    public function listModelExamples(string $owner, string $name, array $query = [])
+    {
+        return $this->modelService->listExamples($owner, $name, $query);
+    }
+
+    public function getModelReadme(string $owner, string $name)
+    {
+        return $this->modelService->readme($owner, $name);
+    }
+
+    public function createPrediction(array $data, array $headers = [])
+    {
+        return $this->predictionService->create($data, $headers);
     }
 
     public function getPrediction(string $id)
@@ -116,14 +143,14 @@ readonly class Replicate
         return $this->predictionService->cancel($id);
     }
 
-    public function listPredictions()
+    public function listPredictions(array $query = [])
     {
-        return $this->predictionService->list();
+        return $this->predictionService->list($query);
     }
 
-    public function listTrainings()
+    public function listTrainings(array $query = [])
     {
-        return $this->trainingService->list();
+        return $this->trainingService->list($query);
     }
 
     public function createTraining(string $owner, string $name, string $version, array $data)
@@ -146,13 +173,18 @@ readonly class Replicate
         return $this->webhookService->defaultSecret();
     }
 
-    public function createDeploymentPrediction(string $owner, string $name, array $data)
+    public function createDeploymentPrediction(string $owner, string $name, array $data, array $headers = [])
     {
-        return $this->predictionService->createDeploymentPrediction($owner, $name, $data);
+        return $this->predictionService->createDeploymentPrediction($owner, $name, $data, $headers);
     }
 
-    public function createModelPrediction(string $owner, string $name, string $version, array $data)
+    public function createModelPrediction(string $owner, string $name, string $version, array $data, array $headers = [])
     {
-        return $this->predictionService->createModelPrediction($owner, $name, $version, $data);
+        return $this->predictionService->createModelPrediction($owner, $name, $version, $data, $headers);
+    }
+
+    public function search(string $query, ?int $limit = null)
+    {
+        return $this->searchService->search($query, $limit);
     }
 }

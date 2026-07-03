@@ -17,8 +17,8 @@ class CollectionService
     /*
      * https://replicate.com/docs/reference/http#collections.list
      */
-    public function list()
+    public function list(array $query = [])
     {
-        return Http::replicate()->get('/collections');
+        return Http::replicate()->get('/collections', $query);
     }
 }

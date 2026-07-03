@@ -8,10 +8,11 @@ class PredictionService
 {
     /*
     * https://replicate.com/docs/reference/http#predictions.create
+    * Pass headers like ['Prefer' => 'wait=60', 'Cancel-After' => '5m'].
     */
-    public function create(array $data)
+    public function create(array $data, array $headers = [])
     {
-        return Http::replicate()->post('/predictions', $data);
+        return Http::replicate()->withHeaders($headers)->post('/predictions', $data);
     }
 
     /*
@@ -25,9 +26,9 @@ class PredictionService
     /*
      * https://replicate.com/docs/reference/http#predictions.list
      */
-    public function list()
+    public function list(array $query = [])
     {
-        return Http::replicate()->get('/predictions');
+        return Http::replicate()->get('/predictions', $query);
     }
 
     /*
@@ -40,17 +41,19 @@ class PredictionService
 
     /*
      * https://replicate.com/docs/reference/http#deployments.predictions.create
+     * Pass headers like ['Prefer' => 'wait=60', 'Cancel-After' => '5m'].
      */
-    public function createDeploymentPrediction(string $owner, string $name, array $data)
+    public function createDeploymentPrediction(string $owner, string $name, array $data, array $headers = [])
     {
-        return Http::replicate()->post("/deployments/$owner/$name/predictions", $data);
+        return Http::replicate()->withHeaders($headers)->post("/deployments/$owner/$name/predictions", $data);
     }
 
     /*
      * https://replicate.com/docs/reference/http#models.predictions.create
+     * Pass headers like ['Prefer' => 'wait=60', 'Cancel-After' => '5m'].
      */
-    public function createModelPrediction(string $owner, string $name, string $version, array $data)
+    public function createModelPrediction(string $owner, string $name, string $version, array $data, array $headers = [])
     {
-        return Http::replicate()->post("/models/$owner/$name/predictions", $data);
+        return Http::replicate()->withHeaders($headers)->post("/models/$owner/$name/predictions", $data);
     }
 }

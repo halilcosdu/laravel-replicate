@@ -25,9 +25,9 @@ class TrainingService
     /*
      * https://replicate.com/docs/reference/http#trainings.list
      */
-    public function list()
+    public function list(array $query = [])
     {
-        return Http::replicate()->get('/trainings');
+        return Http::replicate()->get('/trainings', $query);
     }
 
     /*
