@@ -17,10 +17,13 @@ jobs:
       fail-fast: true
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 8.3, 8.2 ]
-        laravel: [ 11.*, 12.*, 13.*]
+        php: [ 8.4, 8.3, 8.2 ]
+        laravel: [ 10.*, 11.*, 12.*, 13.*]
         stability: [ prefer-lowest, prefer-stable ]
         include:
+          - laravel: 10.*
+            testbench: 8.*
+            carbon: ^2.24 || ^3.0
           - laravel: 11.*
             testbench: 9.*
             carbon: ^3.0
@@ -33,12 +36,14 @@ jobs:
         exclude:
           - php: 8.2
             laravel: 13.*
+          - php: 8.4
+            laravel: 10.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
