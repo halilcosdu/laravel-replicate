@@ -44,6 +44,7 @@ Replicate::getModel(string $owner, string $name)
 Replicate::getModelVersion(string $owner, string $name, string $version)
 Replicate::listModelVersions(string $owner, string $name)
 Replicate::deleteModelVersion(string $owner, string $name, string $version)
+Replicate::deleteModel(string $owner, string $name)
 Replicate::listModels()
 Replicate::createPrediction(array $data)
 Replicate::getPrediction(string $id)
@@ -57,7 +58,14 @@ Replicate::defaultSecret()
 Replicate::createDeploymentPrediction(string $owner, string $name, array $data)
 Replicate::createModelPrediction(string $owner, string $name, string $version, array $data)
 ```
-#### Reference: https://replicate.com/docs/reference/http
+#### Reference
+
+This client covers a subset of the [Replicate HTTP API](https://replicate.com/docs/reference/http) (accounts, collections, deployments, hardware, models, predictions, trainings, webhooks).
+
+> **Current limitations**
+> - The list methods do not expose pagination cursors or filters (e.g. `predictions.list` `created_after`, `models.list` `sort_by`). Callers only get the first page.
+> - The prediction create methods (`createPrediction`, `createModelPrediction`, `createDeploymentPrediction`) do not forward the `Prefer` (sync mode) or `Cancel-After` headers.
+> - The `search`, `models.update`, `models.search`, `models.examples.list`, `models.readme.get`, and `deployments.delete` endpoints are not implemented yet.
 
 ## Example
 
