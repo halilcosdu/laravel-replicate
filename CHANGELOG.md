@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-replicate` will be documented in this file.
 
-## Unreleased
+## v1.2.1 - 2026-07-03
 
 ### Added
 - **Test coverage.** The package previously only asserted container/facade wiring. Added `Http::fake`-based tests for every service method (26 endpoints) plus the `Http::replicate()` macro (base URL, bearer token, JSON accept header, custom API URL). Test count: 2 → 32. `Http::preventStrayRequests()` is now enabled to keep the suite hermetic.
