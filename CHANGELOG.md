@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-replicate` will be documented in this file.
 
-## Unreleased
+## v1.3.0 - 2026-07-03
 
 ### Added
 - **API parity — 6 previously-missing endpoints:**
