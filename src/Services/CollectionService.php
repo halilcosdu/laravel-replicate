@@ -2,14 +2,15 @@
 
 namespace HalilCosdu\Replicate\Services;
 
-use Illuminate\Support\Facades\Http;
+use HalilCosdu\Replicate\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 class CollectionService
 {
     /*
      * https://replicate.com/docs/reference/http#collections.get
      */
-    public function get(string $slug)
+    public function get(string $slug): Response
     {
         return Http::replicate()->get("/collections/$slug");
     }
@@ -17,7 +18,7 @@ class CollectionService
     /*
      * https://replicate.com/docs/reference/http#collections.list
      */
-    public function list(array $query = [])
+    public function list(array $query = []): Response
     {
         return Http::replicate()->get('/collections', $query);
     }

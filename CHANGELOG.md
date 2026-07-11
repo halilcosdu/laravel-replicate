@@ -2,6 +2,34 @@
 
 All notable changes to `laravel-replicate` will be documented in this file.
 
+## v2.0.0 - 2026-07-11
+
+### Added
+
+- Laravel 13 and PHP 8.5 are now exercised by a resolvable Pest 4 / Testbench 11 toolchain.
+- Replicate Files API support: `createFile`, `listFiles`, `getFile`, `deleteFile`, and `downloadFile`.
+- `verifyWebhook()` validates Replicate's HMAC-SHA256 signatures, supports multiple `v1` signatures during key rotation, and rejects stale deliveries using a configurable replay tolerance.
+- `createOfficialModelPrediction()` mirrors the official-model endpoint without the unused legacy version argument.
+- Explicit `Response` return types and typed facade metadata across the public client API.
+
+### Changed
+
+- Supported framework range is now Laravel 11–13. Laravel 10 support was removed because it is end-of-life.
+- CI covers Laravel 11–13 and PHP 8.2–8.5 using both lowest and stable dependency sets; PHP 8.5 is paired with Laravel 12 and 13 according to Laravel's official support matrix.
+- Laravel 11 is explicitly documented as EOL legacy compatibility; only its isolated CI rows relax Composer's security blocker so the package can continue exercising that requested migration target.
+- Development constraints now allow Pest 3/4, Pest Laravel Plugin 3/4, and Collision 8/9 so every declared Laravel version can actually resolve.
+- Code coverage reports are generated only by the dedicated `composer test-coverage` command, avoiding false CI failures when no coverage driver is installed.
+- README was rebuilt around installation, compatibility, production prediction flows, file uploads, webhook security, errors, and the current API surface.
+
+### Deprecated
+
+- `createModelPrediction($owner, $name, $version, $data, $headers)` remains backward compatible, but its version argument has always been ignored by Replicate's official-model endpoint. Use `createOfficialModelPrediction()` for new code.
+
+### Fixed
+
+- Added a typed internal HTTP facade so PHPStan and IDEs understand `Http::replicate()`; obsolete macro errors were removed from the baseline.
+- Added direct `illuminate/http` and `illuminate/support` requirements for framework components used by the package.
+
 ## v1.3.0 - 2026-07-03
 
 ### Added

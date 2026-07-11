@@ -1,10 +1,12 @@
 {
     "name": "halilcosdu/laravel-replicate",
-    "description": "Replicate Laravel PHP client",
+    "description": "Laravel client for Replicate predictions, files, models, trainings, and signed webhooks",
     "keywords": [
-        "HalilCosdu",
+        "ai",
+        "api-client",
         "laravel",
-        "laravel-replicate"
+        "replicate",
+        "webhooks"
     ],
     "homepage": "https://github.com/halilcosdu/laravel-replicate",
     "license": "MIT",
@@ -17,32 +19,31 @@
     ],
     "require": {
         "php": "^8.2",
-        "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0"
+        "illuminate/contracts": "^11.0||^12.0||^13.0",
+        "illuminate/http": "^11.0||^12.0||^13.0",
+        "illuminate/support": "^11.0||^12.0||^13.0",
+        "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "larastan/larastan": "^2.9||^3.0",
         "laravel/pint": "^1.14",
-        "nunomaduro/collision": "^8.1.1",
+        "nunomaduro/collision": "^8.1.1||^9.0",
         "orchestra/testbench": "^9.0.0||^10.0.0||^11.0.0",
-        "pestphp/pest": "^2.34||^3.0",
-        "pestphp/pest-plugin-arch": "^2.7||^3.0",
-        "pestphp/pest-plugin-laravel": "^2.3||^3.0",
+        "pestphp/pest": "^3.8||^4.0",
+        "pestphp/pest-plugin-arch": "^3.1||^4.0",
+        "pestphp/pest-plugin-laravel": "^3.2||^4.0",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1||^2.0",
-        "phpstan/phpstan-phpunit": "^1.3||^2.0",
-        "spatie/laravel-ray": "^1.35"
+        "phpstan/phpstan-phpunit": "^1.3||^2.0"
     },
     "autoload": {
         "psr-4": {
-            "HalilCosdu\\Replicate\\": "src/",
-            "HalilCosdu\\Replicate\\Database\\Factories\\": "database/factories/"
+            "HalilCosdu\\Replicate\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "HalilCosdu\\Replicate\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "HalilCosdu\\Replicate\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -60,7 +61,7 @@
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
+        "test-coverage": "vendor/bin/pest --coverage --coverage-html build/coverage --coverage-text=build/coverage.txt --coverage-clover build/logs/clover.xml",
         "format": "vendor/bin/pint"
     },
     "config": {
@@ -80,6 +81,5 @@
             }
         }
     },
-    "minimum-stability": "dev",
     "prefer-stable": true
 }

@@ -2,14 +2,15 @@
 
 namespace HalilCosdu\Replicate\Services;
 
-use Illuminate\Support\Facades\Http;
+use HalilCosdu\Replicate\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 class DeploymentService
 {
     /*
     * https://replicate.com/docs/reference/http#deployments.list
     */
-    public function list(array $query = [])
+    public function list(array $query = []): Response
     {
         return Http::replicate()->get('/deployments', $query);
     }
@@ -17,7 +18,7 @@ class DeploymentService
     /*
      * https://replicate.com/docs/reference/http#deployments.create
      */
-    public function create(array $data)
+    public function create(array $data): Response
     {
         return Http::replicate()->post('/deployments', $data);
     }
@@ -25,7 +26,7 @@ class DeploymentService
     /*
      * https://replicate.com/docs/reference/http#deployments.get
      */
-    public function get(string $owner, string $name)
+    public function get(string $owner, string $name): Response
     {
         return Http::replicate()->get("/deployments/$owner/$name");
     }
@@ -33,7 +34,7 @@ class DeploymentService
     /*
      * https://replicate.com/docs/reference/http#deployments.update
      */
-    public function update(string $owner, string $name, array $data)
+    public function update(string $owner, string $name, array $data): Response
     {
         return Http::replicate()->patch("/deployments/$owner/$name", $data);
     }
@@ -41,7 +42,7 @@ class DeploymentService
     /*
      * https://replicate.com/docs/reference/http#deployments.delete
      */
-    public function delete(string $owner, string $name)
+    public function delete(string $owner, string $name): Response
     {
         return Http::replicate()->delete("/deployments/$owner/$name");
     }

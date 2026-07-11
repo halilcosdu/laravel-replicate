@@ -2,14 +2,15 @@
 
 namespace HalilCosdu\Replicate\Services;
 
-use Illuminate\Support\Facades\Http;
+use HalilCosdu\Replicate\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 class HardwareService
 {
     /*
      * https://replicate.com/docs/reference/http#hardware.list
      */
-    public function list()
+    public function list(): Response
     {
         return Http::replicate()->get('/hardware');
     }
