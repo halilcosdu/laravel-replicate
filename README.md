@@ -1,153 +1,312 @@
-# Replicate Laravel PHP client
+# Laravel Replicate
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/halilcosdu/laravel-replicate.svg?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/halilcosdu/laravel-replicate/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/halilcosdu/laravel-replicate/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/halilcosdu/laravel-replicate/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/halilcosdu/laravel-replicate/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Tests](https://img.shields.io/github/actions/workflow/status/halilcosdu/laravel-replicate/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/halilcosdu/laravel-replicate/actions/workflows/run-tests.yml)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/halilcosdu/laravel-replicate/php?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
+[![License](https://img.shields.io/packagist/l/halilcosdu/laravel-replicate?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/halilcosdu/laravel-replicate.svg?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
 
-The halilcosdu/laravel-replicate package is a Laravel client for the Replicate API. It provides a convenient way to interact with the Replicate API using PHP and Laravel's Facade pattern.  The package includes methods for managing and interacting with various aspects of the Replicate service, such as accounts, collections, deployments, hardware, models, predictions, and trainings.  For example, you can list all collections, get a specific collection, create a new deployment, get or update an existing deployment, list all hardware, create a new model, get a specific model or its version, list all versions of a model, delete a model version, list all models, create a prediction, get or cancel a prediction, list all predictions, list all trainings, create a new training, get or cancel a training, get the default secret, and create a deployment or model prediction.  The package is configurable via Laravel's configuration system, allowing you to set your API token and URL through your environment file.
+A Laravel-native client for the [Replicate HTTP API](https://replicate.com/docs/reference/http). Run community, official, and deployment models; manage models and trainings; upload files; and authenticate incoming webhooks using Laravel's familiar HTTP client and facade APIs.
+
+## Highlights
+
+- Laravel 11, 12, and 13 support, including PHP 8.5 on supported framework versions.
+- Predictions for community models, official models, and deployments.
+- Sync mode, prediction deadlines, filters, and cursor pagination.
+- Multipart uploads and resource management through Replicate's Files API.
+- HMAC-SHA256 webhook verification with timestamp and key-rotation support.
+- Native `Illuminate\Http\Client\Response` results with accurate IDE return types.
+- Hermetic HTTP tests, PHPStan analysis, and a full version matrix in CI.
+
+## Requirements
+
+| Laravel | Supported PHP versions | Framework status in 2026 |
+| --- | --- | --- |
+| 11.x | 8.2–8.4 | Legacy compatibility; EOL |
+| 12.x | 8.2–8.5 | Security-supported |
+| 13.x | 8.3–8.5 | Actively supported |
+
+The matrix follows Laravel's [official support policy](https://laravel.com/docs/13.x/releases#support-policy). The package requires PHP `^8.2`; PHP 8.5 is tested with Laravel 12 and 13. Laravel 11 is not paired with PHP 8.5 because that combination is not supported by the framework itself.
+
+Laravel 11 reached end-of-life on March 12, 2026 and currently has upstream security advisories. Compatibility remains available for migration windows because it is an explicit target of this package, but new and internet-facing applications should use Laravel 12 or 13. Composer may report or block affected Laravel 11 dependency resolutions; do not suppress that warning in production without reviewing the advisories.
+
 ## Installation
 
-You can install the package via composer:
+Install the package with Composer:
 
 ```bash
 composer require halilcosdu/laravel-replicate
 ```
 
-You can publish the config file with:
+Laravel discovers the service provider and facade automatically. Publish the configuration only when you need to customize it:
 
 ```bash
-php artisan vendor:publish --tag="replicate-config"
+php artisan vendor:publish --tag=replicate-config
 ```
 
-This is the contents of the published config file:
+Add your Replicate API token to `.env`:
+
+```dotenv
+REPLICATE_API_TOKEN=r8_your_token
+```
+
+The published configuration contains:
 
 ```php
 return [
     'api_token' => env('REPLICATE_API_TOKEN'),
     'api_url' => env('REPLICATE_API_URL', 'https://api.replicate.com/v1'),
+    'webhook_secret' => env('REPLICATE_WEBHOOK_SECRET'),
+    'webhook_tolerance' => (int) env('REPLICATE_WEBHOOK_TOLERANCE', 300),
 ];
 ```
 
-## Usage
-```php
-Replicate::account()
-Replicate::getCollection(string $slug)
-Replicate::listCollections()
-Replicate::listDeployments()
-Replicate::createDeployment(array $data)
-Replicate::getDeployment(string $owner, string $name)
-Replicate::updateDeployment(string $owner, string $name, array $data)
-Replicate::listHardware()
-Replicate::createModel(array $data)
-Replicate::getModel(string $owner, string $name)
-Replicate::getModelVersion(string $owner, string $name, string $version)
-Replicate::listModelVersions(string $owner, string $name)
-Replicate::deleteModelVersion(string $owner, string $name, string $version)
-Replicate::updateModel(string $owner, string $name, array $data)
-Replicate::searchModels(string $query)
-Replicate::listModelExamples(string $owner, string $name, array $query = [])
-Replicate::getModelReadme(string $owner, string $name)
-Replicate::deleteModel(string $owner, string $name)
-Replicate::listModels(array $query = [])
-Replicate::createPrediction(array $data, array $headers = [])
-Replicate::getPrediction(string $id)
-Replicate::cancelPrediction($id)
-Replicate::listPredictions(array $query = [])
-Replicate::listTrainings(array $query = [])
-Replicate::createTraining(string $owner, string $name, string $version, array $data)
-Replicate::getTraining(string $id)
-Replicate::cancelTraining($id)
-Replicate::defaultSecret()
-Replicate::createDeploymentPrediction(string $owner, string $name, array $data, array $headers = [])
-Replicate::createModelPrediction(string $owner, string $name, string $version, array $data, array $headers = [])
-Replicate::deleteDeployment(string $owner, string $name)
-Replicate::search(string $query, ?int $limit = null)
-```
+## Quick start
 
-#### Optional headers (sync mode & auto-cancel)
-
-The three prediction-create methods accept an optional `$headers` array. Use it to enable sync mode and automatic cancellation:
-
-```php
-Replicate::createPrediction(
-    ['version' => '...', 'input' => ['prompt' => 'a cat']],
-    ['Prefer' => 'wait=60', 'Cancel-After' => '5m']
-);
-```
-
-#### Pagination & filters
-
-The list methods (`listPredictions`, `listModels`, `listDeployments`, `listCollections`, `listTrainings`, `listModelExamples`) accept an optional `$query` array forwarded as query parameters — e.g. `cursor`, `created_after`, `source`, `sort_by`, `sort_direction`.
-#### Reference
-
-This client covers the [Replicate HTTP API](https://replicate.com/docs/reference/http) — accounts, collections, deployments, hardware, models, predictions, trainings, webhooks, and search.
-
-## Example
+All API methods return Laravel's HTTP client `Response`, so `throw()`, `json()`, `collect()`, `successful()`, and the other standard response helpers are available.
 
 ```php
 use HalilCosdu\Replicate\Facades\Replicate;
 
-$response = Replicate::account();
+$prediction = Replicate::createOfficialModelPrediction(
+    owner: 'black-forest-labs',
+    name: 'flux-schnell',
+    data: [
+        'input' => ['prompt' => 'A quiet library floating above Istanbul'],
+    ],
+)->throw()->json();
+
+$predictionId = $prediction['id'];
 ```
 
-```bash
-$response->body() : string;
-$response->json($key = null, $default = null) : mixed;
-$response->object() : object;
-$response->collect($key = null) : Illuminate\Support\Collection;
-$response->status() : int;
-$response->successful() : bool;
-$response->redirect(): bool;
-$response->failed() : bool;
-$response->clientError() : bool;
-$response->header($header) : string;
-$response->headers() : array;
-```
-In addition to the response methods listed above, the following methods may be used to determine if the response has a given status code:
-```bash
-$response->ok() : bool;                  // 200 OK
-$response->created() : bool;             // 201 Created
-$response->accepted() : bool;            // 202 Accepted
-$response->noContent() : bool;           // 204 No Content
-$response->movedPermanently() : bool;    // 301 Moved Permanently
-$response->found() : bool;               // 302 Found
-$response->badRequest() : bool;          // 400 Bad Request
-$response->unauthorized() : bool;        // 401 Unauthorized
-$response->paymentRequired() : bool;     // 402 Payment Required
-$response->forbidden() : bool;           // 403 Forbidden
-$response->notFound() : bool;            // 404 Not Found
-$response->requestTimeout() : bool;      // 408 Request Timeout
-$response->conflict() : bool;            // 409 Conflict
-$response->unprocessableEntity() : bool; // 422 Unprocessable Entity
-$response->tooManyRequests() : bool;     // 429 Too Many Requests
-$response->serverError() : bool;         // 500 Internal Server Error
+Run a versioned community model through the generic predictions endpoint:
 
+```php
+$response = Replicate::createPrediction([
+    'version' => 'replicate/hello-world:version-id',
+    'input' => ['text' => 'Laravel'],
+]);
+
+$prediction = $response->throw()->json();
 ```
 
-## Testing
+### Sync mode and deadlines
+
+Prediction creation methods accept optional request headers. `Prefer` controls how long the HTTP request waits; `Cancel-After` controls the prediction's lifetime.
+
+```php
+$response = Replicate::createOfficialModelPrediction(
+    'black-forest-labs',
+    'flux-schnell',
+    ['input' => ['prompt' => 'Minimal geometric poster']],
+    ['Prefer' => 'wait=30', 'Cancel-After' => '2m'],
+);
+
+$prediction = $response->throw()->json();
+```
+
+A sync request may still return `starting` or `processing` when the wait period expires. Retrieve its latest state with:
+
+```php
+$prediction = Replicate::getPrediction($predictionId)->throw()->json();
+```
+
+### Pagination and filters
+
+List methods accept an optional query array and pass it directly to Replicate:
+
+```php
+$page = Replicate::listPredictions([
+    'created_after' => now()->subDay()->toIso8601String(),
+    'source' => 'web',
+    'cursor' => $cursor,
+])->throw()->json();
+```
+
+This is supported by `listCollections`, `listDeployments`, `listFiles`, `listModels`, `listModelExamples`, `listPredictions`, and `listTrainings`.
+
+## Files API
+
+Upload a string or readable PHP stream as multipart content. Metadata is encoded as a JSON multipart field.
+
+```php
+$stream = fopen(storage_path('app/training-images.zip'), 'rb');
+
+throw_if($stream === false, RuntimeException::class, 'Unable to open the upload.');
+
+try {
+    $file = Replicate::createFile(
+        contents: $stream,
+        filename: 'training-images.zip',
+        contentType: 'application/zip',
+        metadata: ['dataset' => 'product-photography'],
+    )->throw()->json();
+} finally {
+    fclose($stream);
+}
+```
+
+Manage uploaded resources with `listFiles()`, `getFile($id)`, `deleteFile($id)`, and `downloadFile($id, $owner, $expiry, $signature)`.
+
+## Webhook verification
+
+Never trust a webhook payload before verifying its signature. First retrieve your signing secret once, then store it securely rather than requesting it for every delivery:
+
+```php
+$secret = Replicate::defaultSecret()->throw()->json('key');
+```
+
+```dotenv
+REPLICATE_WEBHOOK_SECRET=whsec_your_signing_secret
+```
+
+Verify the untouched Laravel request before processing its JSON body:
+
+```php
+use HalilCosdu\Replicate\Facades\Replicate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/webhooks/replicate', function (Request $request) {
+    abort_unless(Replicate::verifyWebhook($request), 401);
+
+    $prediction = $request->json()->all();
+
+    // Persist output, dispatch a job, or continue a model pipeline...
+
+    return response()->noContent();
+});
+```
+
+`verifyWebhook()` validates the `webhook-id`, `webhook-timestamp`, and every `v1` candidate in `webhook-signature` using constant-time comparison. Requests outside the configured 300-second tolerance are rejected to reduce replay risk. You may override the secret and tolerance for a specific request:
+
+```php
+$valid = Replicate::verifyWebhook($request, $secret, tolerance: 120);
+```
+
+Remember to exempt the webhook route from CSRF protection and make processing idempotent because Replicate may retry a delivery.
+
+## API reference
+
+### Account, discovery, and hardware
+
+```php
+Replicate::account();
+Replicate::search(string $query, ?int $limit = null);
+Replicate::listHardware();
+```
+
+### Collections
+
+```php
+Replicate::listCollections(array $query = []);
+Replicate::getCollection(string $slug);
+```
+
+### Deployments
+
+```php
+Replicate::listDeployments(array $query = []);
+Replicate::createDeployment(array $data);
+Replicate::getDeployment(string $owner, string $name);
+Replicate::updateDeployment(string $owner, string $name, array $data);
+Replicate::deleteDeployment(string $owner, string $name);
+Replicate::createDeploymentPrediction(string $owner, string $name, array $data, array $headers = []);
+```
+
+### Files
+
+```php
+Replicate::createFile(mixed $contents, string $filename, string $contentType = 'application/octet-stream', array $metadata = []);
+Replicate::listFiles(array $query = []);
+Replicate::getFile(string $id);
+Replicate::deleteFile(string $id);
+Replicate::downloadFile(string $id, string $owner, int $expiry, string $signature);
+```
+
+### Models and versions
+
+```php
+Replicate::listModels(array $query = []);
+Replicate::createModel(array $data);
+Replicate::getModel(string $owner, string $name);
+Replicate::updateModel(string $owner, string $name, array $data);
+Replicate::deleteModel(string $owner, string $name);
+Replicate::getModelReadme(string $owner, string $name);
+Replicate::searchModels(string $query);
+Replicate::listModelExamples(string $owner, string $name, array $query = []);
+Replicate::listModelVersions(string $owner, string $name);
+Replicate::getModelVersion(string $owner, string $name, string $version);
+Replicate::deleteModelVersion(string $owner, string $name, string $version);
+```
+
+### Predictions
+
+```php
+Replicate::createPrediction(array $data, array $headers = []);
+Replicate::createOfficialModelPrediction(string $owner, string $name, array $data, array $headers = []);
+Replicate::getPrediction(string $id);
+Replicate::listPredictions(array $query = []);
+Replicate::cancelPrediction(string $id);
+```
+
+The legacy `createModelPrediction($owner, $name, $version, $data, $headers)` method remains available for backward compatibility. Replicate's official-model endpoint does not accept a version path parameter, so new code should use `createOfficialModelPrediction()`.
+
+### Trainings
+
+```php
+Replicate::listTrainings(array $query = []);
+Replicate::createTraining(string $owner, string $name, string $version, array $data);
+Replicate::getTraining(string $id);
+Replicate::cancelTraining(string $id);
+```
+
+### Webhooks
+
+```php
+Replicate::defaultSecret();
+Replicate::verifyWebhook(Request $request, ?string $secret = null, ?int $tolerance = null);
+```
+
+## Error handling
+
+The client does not hide API failures. Use Laravel's standard response helpers according to your application's needs:
+
+```php
+$response = Replicate::getPrediction($predictionId);
+
+if ($response->tooManyRequests()) {
+    // Release the job using Retry-After or your own backoff policy.
+}
+
+$prediction = $response->throw()->json();
+```
+
+See Laravel's [HTTP client documentation](https://laravel.com/docs/http-client) for response inspection, retries, exceptions, and test fakes.
+
+## Testing and quality
 
 ```bash
 composer test
+composer analyse
+vendor/bin/pint --test
 ```
+
+The GitHub Actions matrix covers supported Laravel 11–13 and PHP 8.2–8.5 combinations with both lowest and stable dependency sets.
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
-## Contributing
+## Security
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Please follow [SECURITY.md](SECURITY.md) to report vulnerabilities privately.
 
 ## Credits
 
 - [Halil Cosdu](https://github.com/halilcosdu)
-- [All Contributors](../../contributors)
+- [All contributors](https://github.com/halilcosdu/laravel-replicate/graphs/contributors)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+Laravel Replicate is open-source software licensed under the [MIT license](LICENSE.md).

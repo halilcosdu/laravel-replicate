@@ -2,14 +2,15 @@
 
 namespace HalilCosdu\Replicate\Services;
 
-use Illuminate\Support\Facades\Http;
+use HalilCosdu\Replicate\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 class TrainingService
 {
     /*
      * https://replicate.com/docs/reference/http#trainings.create
      */
-    public function create(string $owner, string $name, string $version, array $data)
+    public function create(string $owner, string $name, string $version, array $data): Response
     {
         return Http::replicate()->post("/models/$owner/$name/versions/$version/trainings", $data);
     }
@@ -17,7 +18,7 @@ class TrainingService
     /*
      * https://replicate.com/docs/reference/http#trainings.get
      */
-    public function get(string $id)
+    public function get(string $id): Response
     {
         return Http::replicate()->get("/trainings/$id");
     }
@@ -25,7 +26,7 @@ class TrainingService
     /*
      * https://replicate.com/docs/reference/http#trainings.list
      */
-    public function list(array $query = [])
+    public function list(array $query = []): Response
     {
         return Http::replicate()->get('/trainings', $query);
     }
@@ -33,7 +34,7 @@ class TrainingService
     /*
      * https://replicate.com/docs/reference/http#trainings.cancel
      */
-    public function cancel($id)
+    public function cancel(string $id): Response
     {
         return Http::replicate()->post("/trainings/$id/cancel");
     }

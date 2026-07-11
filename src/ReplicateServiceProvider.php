@@ -2,7 +2,7 @@
 
 namespace HalilCosdu\Replicate;
 
-use Illuminate\Support\Facades\Http;
+use HalilCosdu\Replicate\Facades\Http;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

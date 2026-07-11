@@ -168,6 +168,13 @@ describe('predictions', function () {
         Http::assertSent(fn ($request) => $request->method() === 'POST'
             && $request->url() === 'https://api.replicate.com/v1/models/meta/llama-3/predictions');
     });
+
+    it('creates an official model prediction without a legacy version argument', function () {
+        Replicate::createOfficialModelPrediction('meta', 'llama-3', ['input' => ['prompt' => 'x']]);
+
+        Http::assertSent(fn ($request) => $request->method() === 'POST'
+            && $request->url() === 'https://api.replicate.com/v1/models/meta/llama-3/predictions');
+    });
 });
 
 describe('trainings', function () {
