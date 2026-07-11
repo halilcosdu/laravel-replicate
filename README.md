@@ -1,7 +1,6 @@
 # Laravel Replicate
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/halilcosdu/laravel-replicate.svg?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
-[![Tests](https://img.shields.io/github/actions/workflow/status/halilcosdu/laravel-replicate/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/halilcosdu/laravel-replicate/actions/workflows/run-tests.yml)
 [![PHP Version](https://img.shields.io/packagist/dependency-v/halilcosdu/laravel-replicate/php?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
 [![License](https://img.shields.io/packagist/l/halilcosdu/laravel-replicate?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/halilcosdu/laravel-replicate.svg?style=flat-square)](https://packagist.org/packages/halilcosdu/laravel-replicate)
